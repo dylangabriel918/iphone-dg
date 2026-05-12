@@ -18,5 +18,35 @@
   </main>
 
   <script src="script.js"></script>
+  <script>
+async function cargarProductos() {
+    const url = "https://docs.google.com/spreadsheets/d/1HgatiIRzh5rHRDL-zoNOyydqQYCVVSJ05J2HCz_NGKo/edit?usp=sharing&output=csv";
+
+    const respuesta = await fetch(url);
+    const texto = await respuesta.text();
+
+    const filas = texto.split("\n").map(f => f.split(","));
+
+    let html = "";
+
+    for (let i = 1; i < filas.length; i++) {
+        const [nombre, precio, imagen] = filas[i];
+
+        html += `
+            <div class="producto">
+                <img src="${imagen}" alt="${nombre}">
+                <h3>${nombre}</h3>
+                <p>$${precio}</p>
+            </div>
+        `;
+    }
+
+    document.getElementById("catalogo").innerHTML = html;
+}
+
+cargarProductos();
+</script>
+<div id="catalogo"></div>
+
 </body>
 </html>
